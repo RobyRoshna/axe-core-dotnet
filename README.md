@@ -4,8 +4,8 @@
 This is a practical guide to help set up automated accessibility testing in your .NET project. 
 
 NOTE: Automated acscessibility tests do not identify all barriers on your app, it should just act as a starting point and not a replacement for targeted accessibility audits.
-
 **Disclaimer:** This is a step-by-step setup guide, not a replacement for the official documentation. All accessibility scanning is powered by [axe-core](https://github.com/dequelabs/axe-core) and the official [`Deque.AxeCore.Playwright`](https://www.nuget.org/packages/Deque.AxeCore.Playwright) NuGet package maintained by [Deque Systems](https://www.deque.com/). Head there for the full API reference, changelog, and support.
+
 ---
 
 ## Table of Contents
