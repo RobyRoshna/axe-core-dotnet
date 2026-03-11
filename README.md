@@ -1,12 +1,11 @@
 !!! Actual tests and more explanations coming soon
 # Accessibility Testing in .NET with axe-core and Playwright 
 
-A practical guide to help set up automated accessibility testing in your .NET project. This step by step guide is specifically for .NET applications.
+This is a practical guide to help set up automated accessibility testing in your .NET project. 
 
 NOTE: Automated acscessibility tests do not identify all barriers on your app, it should just act as a starting point and not a replacement for targeted accessibility audits.
 
-Get started straigtaway with the NUGET Package [Deque.AxeCore.Playwright on NuGet](https://www.nuget.org/packages/Deque.AxeCore.Playwright)
-
+**Disclaimer:** This is a step-by-step setup guide, not a replacement for the official documentation. All accessibility scanning is powered by [axe-core](https://github.com/dequelabs/axe-core) and the official [`Deque.AxeCore.Playwright`](https://www.nuget.org/packages/Deque.AxeCore.Playwright) NuGet package maintained by [Deque Systems](https://www.deque.com/). Head there for the full API reference, changelog, and support.
 ---
 
 ## Table of Contents
