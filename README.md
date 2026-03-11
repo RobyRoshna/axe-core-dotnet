@@ -3,9 +3,10 @@
 
 A practical guide to help set up automated accessibility testing in your .NET project. This step by step guide is specifically for .NET applications.
 
-NOTE: Automated acscessibility tests do not identify all barriers on you app, it should just act as a starting point and not a replacement for targeted accessibility audits.
+NOTE: Automated acscessibility tests do not identify all barriers on your app, it should just act as a starting point and not a replacement for targeted accessibility audits.
 
 Get started straigtaway with the NUGET Package [Deque.AxeCore.Playwright on NuGet](https://www.nuget.org/packages/Deque.AxeCore.Playwright)
+
 ---
 
 ## Table of Contents
@@ -14,7 +15,7 @@ Get started straigtaway with the NUGET Package [Deque.AxeCore.Playwright on NuGe
 - [How it fits into your testing strategy](#how-it-fits-into-your-testing-strategy)
 - [Prerequisites](#prerequisites)
 - [Setup](#setup)
-- [Writing your first test](#writing-your-first-test)
+- [Writing your test](#writing-your-test)
 - [Scoping your scans](#scoping-your-scans)
 - [Adding to an existing test suite](#adding-to-an-existing-test-suite)
 - [Organising tests with Categories](#organising-tests-with-categories)
@@ -26,7 +27,7 @@ Get started straigtaway with the NUGET Package [Deque.AxeCore.Playwright on NuGe
 
 ## What is axe-core and why should you care
 
-[axe-core](https://github.com/dequelabs/axe-core) is an open source accessibility rules engine built by [Deque](https://www.deque.com/), only of the industry leaders in a11y training and audit tooling. You point it at a page, it scans the DOM, and it tells you what's broken and why — things like missing alt text, insufficient colour contrast, form inputs without labels, and so on.
+[axe-core](https://github.com/dequelabs/axe-core) is an open source accessibility rules engine built by [Deque](https://www.deque.com/), one of the industry leaders in a11y training and audit tooling. You point it at a page, it scans the DOM, and it tells you what's broken and why — things like missing alt text, insufficient colour contrast, form inputs without labels, and so on.
 
 It can't catch everything — some accessibility issues require human judgement. It's good at catching the mechanical stuff automatically, and it maps violations directly to [WCAG](https://www.w3.org/WAI/standards-guidelines/wcag/) success criteria so you know exactly what standard you're failing.
 
@@ -212,7 +213,7 @@ var results = await Page.RunAxe(context);
 
 ### Scan dynamic states
 
-This is where axe in E2E tests really earns its keep. Static page scanners can only see the initial DOM — but your users interact with modals, validation errors, tooltips, and menus. Playwright puts the page in those states first, then axe scans them:
+This is clear advantage over axe's own browser extension. Static page scanners can only see the initial DOM — but your users interact with modals, validation errors, tooltips, and menus. Playwright puts the page in those states first, then axe scans them:
 
 ```csharp
 [Test]
