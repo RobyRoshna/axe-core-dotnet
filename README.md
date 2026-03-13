@@ -119,7 +119,7 @@ On Mac or Linux:
 
 ## Writing your test
 
-`Microsoft.Playwright.NUnit` gives you a `PageTest` base class that handles all the browser lifecycle boilerplate — launching the browser, creating a context, opening a page, tearing it all down after. You inherit from it and just write tests.
+`Microsoft.Playwright.NUnit` gives you a `PageTest` base class that handles all the browser lifecycle boilerplate i.e launching the browser, creating a context, opening a page, tearing it all down after. You inherit from it and just write tests.
 
 ```csharp
 using Deque.AxeCore.Playwright;
@@ -141,7 +141,7 @@ public class HomePageTests : PageTest
 }
 ```
 
-`Page.RunAxe()` is the entire axe integration — one method call. It scans the full page and returns an `AxeResult` object containing violations, passes, incomplete checks, and inapplicable rules.
+`Page.RunAxe()` is the entire axe integration with one method call. It scans the full page and returns an `AxeResult` object containing violations, passes, incomplete checks, and inapplicable rules.
 
 ### Making failure messages useful
 
@@ -161,7 +161,7 @@ Assert.That(results.Violations, Is.Empty, message);
 
 ### Filtering by WCAG level
 
-By default `RunAxe()` runs all rules. You can narrow it to a specific compliance target using `AxeRunOptions`:
+By default `RunAxe()` runs all rules. You can narrow it to a specific compliance target using `AxeRunOptions`: As per current (2025) Government of Canada standards, it WCAG 2.1 AA.
 
 ```csharp
 using Deque.AxeCore.Commons;
@@ -179,13 +179,12 @@ var options = new AxeRunOptions
 var results = await Page.RunAxe(null, options);
 ```
 
-WCAG 2.1 AA (`wcag21aa`) is the most common compliance target — it's what most accessibility laws and procurement requirements reference.
 
 ---
 
 ## Scoping your scans
 
-By default axe scans the entire page. Sometimes that's more than you want — for example, you might want to exclude a third-party chat widget you don't control, or scan only a specific component.
+By default axe scans the entire page but you may want to exclude anything you don't control, or scan only a specific component.
 
 ### Scan only part of a page
 
@@ -255,7 +254,7 @@ public async Task ProductPage_AddToCart()
 
 ### Starting on an app that already has violations
 
-If you point axe at an existing app, it will almost certainly find violations immediately. Don't let that block you from committing — start in audit mode (log but don't fail) while you work through the backlog, then flip to hard assertions once you're clean:
+If you point axe at an existing app, it will almost certainly find violations immediately. You can start in audit mode (log but don't fail) while you work through the backlog, then flip to hard assertions once you're clean:
 
 ```csharp
 // Audit mode — commit this while you're fixing existing issues
@@ -271,7 +270,7 @@ if (results.Violations.Any())
 
 ## Organising tests with Categories
 
-NUnit's `[Category]` attribute is just a label — it doesn't change how tests run, it just lets you filter them. You can put it on a whole fixture or individual tests, and stack multiple categories. This is exceptionally useful if you do not want to run your a11y tests everytime there is a minor change.
+NUnit's `[Category]` attribute is just a label that doesn't change how tests run, but just lets you filter them. You can put it on a whole fixture or individual tests, and stack multiple categories. This is exceptionally useful if you do not want to run your a11y tests everytime there is a minor change.
 
 ```csharp
 [TestFixture]
@@ -314,68 +313,14 @@ dotnet test --filter "Category=Accessibility|Category=Smoke"
 dotnet test --filter "Category!=Slow"
 ```
 
-A common pattern in CI is to run fast unit/integration tests on every commit, and gate E2E + accessibility tests on pull requests to `main` only — they take longer and need a running app.
+A common pattern in CI is to run fast unit/integration tests on every commit, and gate E2E + accessibility tests on pull requests to `main` only as they take longer and need a running app.
 
 ---
 
 ## Running in CI/CD
 
-The main thing to know: **Playwright browsers aren't included in the NuGet package** — you have to install them as a separate step in your pipeline.
+Coming soon!
 
-### GitHub Actions
-
-```yaml
-name: Tests
-
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.x'
-
-      - name: Build
-        run: dotnet build
-
-      - name: Install Playwright browsers
-        run: pwsh MyApp.AccessibilityTests/bin/Debug/net8.0/playwright.ps1 install --with-deps chromium
-
-      - name: Start app
-        run: dotnet run --project MyApp &
-        # Give the app a moment to start
-        # For a more robust solution look at health check polling
-
-      - name: Run accessibility tests
-        env:
-          # If your tests read a base URL from an env var
-          TEST_BASE_URL: http://localhost:5000
-        run: dotnet test --filter "Category=Accessibility" --logger "trx;LogFileName=results.trx"
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: always()  # upload even if tests fail
-        with:
-          name: test-results
-          path: "**/*.trx"
-```
-
-### Pointing tests at different environments
-
-Rather than hardcoding URLs, read the base URL from an environment variable:
-
-```csharp
-var baseUrl = Environment.GetEnvironmentVariable("TEST_BASE_URL") ?? "https://localhost:5001";
-await Page.GotoAsync($"{baseUrl}/checkout");
-```
-
-Then in CI you set `TEST_BASE_URL` per environment — localhost for PR checks, your staging URL for nightly runs, etc.
 
 ---
 
